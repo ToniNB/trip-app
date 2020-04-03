@@ -1,0 +1,28 @@
+p {margin-bottom: 0;}
+
+.trip-app,
+.trip-app > div,
+.trip-app > div > div,
+.trip-app > div > div > div{
+  height: 100%;
+}
+
+.trip-app {
+  padding: 32px;
+
+  .trip-list{
+    overflow: scroll;
+
+    .trip-item{
+      padding: 24px 0;
+      border: solid 1px;
+      height: auto;
+      background-color: #CFE2F3;
+      cursor: pointer;
+
+      &.selected {
+        background-color: #F4CCCC;
+      }
+    }
+  }
+}
