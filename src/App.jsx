@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Map, GoogleApiWrapper, Polyline, Marker, InfoWindow } from 'google-maps-react';
 import decodePolyline from 'decode-google-map-polyline';
+import 'bootstrap/dist/css/bootstrap.css';
 
 import './App.scss';
 
