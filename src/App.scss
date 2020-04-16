@@ -1,17 +1,16 @@
 p {margin-bottom: 0;}
 
-.trip-app,
-.trip-app > div,
-.trip-app > div > div,
-.trip-app > div > div > div{
-  height: 100%;
-}
-
 .trip-app {
   padding: 32px;
 
+  .container,
+  .row,
+  .trip-list {
+    height: 100%;
+  }
   .trip-list{
     overflow: scroll;
+    overflow-x: hidden;
 
     .trip-item{
       padding: 24px 0;

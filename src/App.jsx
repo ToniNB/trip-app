@@ -11,6 +11,7 @@ export class MapContainer extends Component {
 
     this.state = {
         data: [],
+        dataStops: [],
         route: '',
         tripSelected: '',
         stops: [],
@@ -20,15 +21,31 @@ export class MapContainer extends Component {
         showingInfoWindow: false,
         activeMarker: {},
         selectedPlace: {},
+        height: '',
     };
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
 
   async componentDidMount() {
     const url = "https://europe-west1-metropolis-fe-test.cloudfunctions.net/api/trips";
     const response = await fetch(url);
     const data = await response.json();
+    const urlStops = "https://europe-west1-metropolis-fe-test.cloudfunctions.net/api/stops";
+    const responseStops = await fetch(urlStops);
+    const dataStops = await responseStops.json();
     console.log(data);
-    this.setState({ data });
+    console.log(dataStops);
+    this.setState({ data, dataStops });
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
+
+  updateWindowDimensions() {
+    this.setState({ height: window.innerHeight });
   }
 
   handleClick = (trip, index) => {
@@ -57,6 +74,15 @@ export class MapContainer extends Component {
     });
   }
 
+  dateFormatter = date =>{
+    const parts = date.slice(0, -1).split('T');
+    const dateComponent = new Date(parts[0]);
+    const timeComponent = parts[1].slice(0, -4);;
+    const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+    const dateFormatted = `${dateComponent.toLocaleDateString('es-ES', dateOptions)} - ${timeComponent}`
+    return dateFormatted;
+  }
+
   render() {
     const { 
       data, 
@@ -66,8 +92,17 @@ export class MapContainer extends Component {
       originMarker,
       finalMarker,
       centerRoute, 
+      height,
+      activeMarker,
+      showingInfoWindow,
+      selectedPlace,
     } = { ...this.state };
     const { google } = { ...this.props };
+
+    const ongoing = "En camino";
+    const scheduled = "Programado";
+    const cancelled = "Cancelado";
+    const finalized = "Finalizado";
 
     const mapStyles = {
       position: 'relative',
@@ -82,8 +117,18 @@ export class MapContainer extends Component {
           className={`trip-item ${tripSelected === index ? 'selected' : ''}`}
           onClick={this.handleClick.bind(this, trip, index)}
         > 
-          <p>{trip.description}</p>
-          <p>{trip.status}</p>
+          <h5>{trip.description}</h5>
+          <p>{`Conductor: ${trip.driverName}`}</p>
+          <p>Estado: {' '}
+            {trip.status === "ongoing" ? ongoing :
+              trip.status === "scheduled" ? scheduled :
+              trip.status === "cancelled" ? cancelled :
+              trip.status === "finalized" ? finalized :
+              ''
+            }
+          </p>
+          <p>{this.dateFormatter(trip.startTime)}</p>
+          <p>{this.dateFormatter(trip.endTime)}</p>
         </div>
       )
     ));
@@ -146,10 +191,10 @@ export class MapContainer extends Component {
             />,
             stopMarkers,
             <InfoWindow
-              marker={this.state.activeMarker}
-              visible={this.state.showingInfoWindow}>
+              marker={activeMarker}
+              visible={showingInfoWindow}>
                 <div className="infoWindow">
-                  <p>{this.state.selectedPlace.name}</p>
+                  <p>{selectedPlace.name}</p>
                 </div>
             </InfoWindow>,
           ]
@@ -157,9 +202,9 @@ export class MapContainer extends Component {
         }
       </Map>
     ;
-
+        console.log(window.innerHeight);
     return (
-      <div className="trip-app">
+      <div className="trip-app" style={{height: height}}>
         <div className="container">
           <div className="row">
             <div className="col-4 trip-list">

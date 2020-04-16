@@ -1,0 +1,12 @@
+En el directorio del proyecto hay que ejecutar los siguientes scripts:
+
+El siguiente script es el que iniciará la aplicación en el navegador (localhost:3000):
+
+###	npm start
+
+El siguiente script sirve para asegurarnos de que tenemos instalados todas
+las librerias necesarias para ejecutar la aplicación.
+(En este caso no debería ser necesario porque vienen todos los modulos en el zip)
+
+###	npm install
+
