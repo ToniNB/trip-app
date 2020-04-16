@@ -12,9 +12,7 @@ Now we can run the next script for see trip-app in localhost:
 
 ### `npm start`
 
-
-
-
+The next indications are created by default by [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
