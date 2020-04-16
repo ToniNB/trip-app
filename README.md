@@ -1,5 +1,13 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## First time access to the project
+
+The first time we can run next script in the project directory:
+
+### `npm install`
+
+This is for install node_modules libraries required for the app.
+
 ## Available Scripts
 
 In the project directory, you can run:
